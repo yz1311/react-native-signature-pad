@@ -3,7 +3,7 @@ React Native wrapper around @[szimek's](https://github.com/szimek) HTML5 Canvas 
 
 - Supports Android and iOS
 - Pure JavaScript implementation with no native dependencies
-- Tested with RN 0.20
+- Tested with RN 0.32
 - Can easily be rotated using the "transform" style
 - Generates a base64 encoded png image of the signature
 
@@ -29,12 +29,17 @@ var {
 
 var SignaturePad = require('react-native-signature-pad');
 
+var penMinWidth = 2;  // Default value: 1
+var penMaxWidth = 3;  // Default value: 4
+
 export default class Demo extends Component {
   render = () => {
     return (
       <View style={{flex: 1}}>
           <SignaturePad onError={this._signaturePadError}
                         onChange={this._signaturePadChange}
+                        penMinWidth={penMinWidth}
+                        penMaxWidth={penMaxWidth}
                         style={{flex: 1, backgroundColor: 'white'}}/>
       </View>
     )
