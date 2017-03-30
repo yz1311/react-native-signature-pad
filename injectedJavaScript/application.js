@@ -44,7 +44,6 @@ var content = (penColor, backgroundColor, dataURL, penMinWidth, penMaxWidth, nam
     enableSignaturePadFunctionality();
   };
 
-
   var bodyWidth = document.body.clientWidth;
   var bodyHeight = document.body.clientHeight;
   if(!bodyWidth) {
@@ -55,7 +54,13 @@ var content = (penColor, backgroundColor, dataURL, penMinWidth, penMaxWidth, nam
   }
 
   var canvasElement = document.querySelector('canvas');
-  showSignaturePad(canvasElement, bodyWidth, bodyHeight);
+  var context = canvasElement.getContext("2d");
+
+  var fontSize = 45;
+
+  context.font = "45px SignatureFont";
+  context.fillText('${name}', 20, 100);
+
   /* showSignaturePad(canvasElement, 300, 300); */
 `;
 

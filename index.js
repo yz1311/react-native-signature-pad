@@ -44,6 +44,7 @@ class SignaturePad extends Component {
         props.dataURL,
         props.penMinWidth,
         props.penMaxWidth,
+        this.state.name
       );
     var html = htmlContent(injectedJavaScript);
     this.source = { html };
@@ -52,6 +53,28 @@ class SignaturePad extends Component {
     // Given that we use url changes to communicate signature changes to the
     //  React Native app, the JS is re-injected every time a stroke is drawn.
   }
+
+  componentWillReceiveProps = (nextProps) => {
+    console.log('componentWillReceiveProps', this.state.name, nextProps.name);
+    if (this.state.name !== nextProps.name) {
+      this.setState({ name: nextProps.name });
+
+      const { backgroundColor } = StyleSheet.flatten(this.props.style);
+      var injectedJavaScript = injectedExecuteNativeFunction
+        + injectedErrorHandler
+        + injectedSignaturePad
+        + injectedApplication(
+          this.props.penColor,
+          backgroundColor,
+          this.props.dataURL,
+          this.props.penMinWidth,
+          this.props.penMaxWidth,
+          nextProps.name
+        );
+      var html = htmlContent(injectedJavaScript);
+      this.source = { html };
+    }
+  };
 
   _onNavigationChange = (args) => {
     this._parseMessageFromWebViewNavigationChange(unescape(args.url));
