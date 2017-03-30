@@ -56,6 +56,7 @@ var content = (penColor, backgroundColor, dataURL, penMinWidth, penMaxWidth) => 
 
   var canvasElement = document.querySelector('canvas');
   showSignaturePad(canvasElement, bodyWidth, bodyHeight);
+  /* showSignaturePad(canvasElement, 300, 300); */
 `;
 
 export default content;
