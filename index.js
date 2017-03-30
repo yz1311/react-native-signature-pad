@@ -22,6 +22,7 @@ class SignaturePad extends Component {
     dataURL: PropTypes.string,
     penMinWidth: PropTypes.number,
     penMaxWidth: PropTypes.number,
+    name: PropTypes.string,
   };
 
   static defaultProps = {
@@ -32,7 +33,7 @@ class SignaturePad extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {base64DataUrl: props.dataURL || null};
+    this.state = {base64DataUrl: props.dataURL || null, name: props.name};
     const { backgroundColor } = StyleSheet.flatten(props.style);
     var injectedJavaScript = injectedExecuteNativeFunction
       + injectedErrorHandler
