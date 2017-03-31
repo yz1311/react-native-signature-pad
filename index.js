@@ -31,6 +31,7 @@ class SignaturePad extends Component {
     onChange: () => {},
     onError: () => {},
     style: {},
+    useFont: false
   };
 
   constructor(props) {
