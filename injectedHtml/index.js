@@ -1,4 +1,4 @@
-var content = script =>
+var content = (script, fontStyle) =>
   `<html>
     <style>
     *
@@ -16,8 +16,12 @@ var content = script =>
       -ms-transform:rotate(-90deg)  translate(-100%, 0px);
       -webkit-transform:rotate(-90deg)  translate(-100%, 0px);*/
     }
-
     </style>
+
+    <style type="text/css">
+      ${fontStyle}
+    </style>
+
     <body>
       <canvas style="margin-left: 0; margin-top: 0;"></canvas>
       <script>

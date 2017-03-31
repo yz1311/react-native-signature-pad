@@ -23,6 +23,7 @@ class SignaturePad extends Component {
     penMinWidth: PropTypes.number,
     penMaxWidth: PropTypes.number,
     name: PropTypes.string,
+    fontStyle: PropTypes.string,
   };
 
   static defaultProps = {
@@ -46,7 +47,7 @@ class SignaturePad extends Component {
         props.penMaxWidth,
         this.state.name
       );
-    var html = htmlContent(injectedJavaScript);
+    var html = htmlContent(injectedJavaScript, props.fontStyle);
     this.source = { html };
     // We don't use WebView's injectedJavaScript because on Android,
     //  the WebView re-injects the JavaScript upon every url change.
@@ -71,7 +72,7 @@ class SignaturePad extends Component {
           this.props.penMaxWidth,
           nextProps.name
         );
-      var html = htmlContent(injectedJavaScript);
+      var html = htmlContent(injectedJavaScript, this.props.fontStyle);
       this.source = { html };
     }
   };
