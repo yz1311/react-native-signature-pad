@@ -61,7 +61,7 @@ var content = (penColor, backgroundColor, dataURL, penMinWidth, penMaxWidth, use
     context.font = "45px SignatureFont";
     context.fillText('${name}', 20, 100);
   } else {
-    showSignaturePad(canvasElement, 300, 300);
+    showSignaturePad(canvasElement, bodyWidth, bodyHeight);
   }
 `;
 
