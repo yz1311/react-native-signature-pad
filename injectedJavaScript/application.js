@@ -60,6 +60,9 @@ var content = (penColor, backgroundColor, dataURL, penMinWidth, penMaxWidth, use
     var fontSize = 45;
     context.font = "45px SignatureFont";
     context.fillText('${name}', 20, 100);
+
+    /* Fire a finishedStroke function to update the state */
+    executeNativeFunction('finishedStroke', {base64DataUrl: canvasElement.toDataURL()});
   } else {
     showSignaturePad(canvasElement, bodyWidth, bodyHeight);
   }
