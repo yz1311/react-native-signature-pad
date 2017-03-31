@@ -54,14 +54,15 @@ var content = (penColor, backgroundColor, dataURL, penMinWidth, penMaxWidth, nam
   }
 
   var canvasElement = document.querySelector('canvas');
-  var context = canvasElement.getContext("2d");
 
-  var fontSize = 45;
-
-  context.font = "45px SignatureFont";
-  context.fillText('${name}', 20, 100);
-
-  /* showSignaturePad(canvasElement, 300, 300); */
+  if (${useFont}) {
+    var context = canvasElement.getContext("2d");
+    var fontSize = 45;
+    context.font = "45px SignatureFont";
+    context.fillText('${name}', 20, 100);
+  } else {
+    showSignaturePad(canvasElement, 300, 300);
+  }
 `;
 
 export default content;

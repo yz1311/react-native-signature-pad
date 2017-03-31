@@ -22,6 +22,7 @@ class SignaturePad extends Component {
     dataURL: PropTypes.string,
     penMinWidth: PropTypes.number,
     penMaxWidth: PropTypes.number,
+    useFont: PropTypes.bool,
     name: PropTypes.string,
     fontStyle: PropTypes.string,
   };
@@ -45,6 +46,7 @@ class SignaturePad extends Component {
         props.dataURL,
         props.penMinWidth,
         props.penMaxWidth,
+        props.useFont,
         this.state.name
       );
     var html = htmlContent(injectedJavaScript, props.fontStyle);
@@ -57,7 +59,7 @@ class SignaturePad extends Component {
 
   componentWillReceiveProps = (nextProps) => {
     console.log('componentWillReceiveProps', this.state.name, nextProps.name);
-    if (this.state.name !== nextProps.name) {
+    if (this.props.useFont && this.state.name !== nextProps.name) {
       this.setState({ name: nextProps.name });
 
       const { backgroundColor } = StyleSheet.flatten(this.props.style);
@@ -70,6 +72,7 @@ class SignaturePad extends Component {
           this.props.dataURL,
           this.props.penMinWidth,
           this.props.penMaxWidth,
+          this.props.useFont,
           nextProps.name
         );
       var html = htmlContent(injectedJavaScript, this.props.fontStyle);

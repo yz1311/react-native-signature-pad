@@ -58,6 +58,7 @@ export default class Demo extends Component {
           penMinWidth={penMinWidth}
           penMaxWidth={penMaxWidth}
           style={{flex: 1, backgroundColor: 'white'}}
+          useFont={false}
           fontStyle={signatureFont}
         />
       </View>
