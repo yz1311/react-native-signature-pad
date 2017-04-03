@@ -57,9 +57,46 @@ var content = (penColor, backgroundColor, dataURL, penMinWidth, penMaxWidth, use
 
   if (${useFont}) {
     var context = canvasElement.getContext("2d");
+    var devicePixelRatio = 1; /* window.devicePixelRatio || 1; */
+    context.canvas.width = bodyWidth * devicePixelRatio;
+    context.canvas.height = bodyHeight * devicePixelRatio;
+
+    var ratio = Math.max(window.devicePixelRatio || 1, 1);
+    var backingStoreRatio = context.webkitBackingStorePixelRatio ||
+			context.mozBackingStorePixelRatio ||
+			context.msBackingStorePixelRatio ||
+			context.oBackingStorePixelRatio ||
+			context.backingStorePixelRatio || 1;
+    var realRatio = ratio / backingStoreRatio;
+    if (ratio !== backingStoreRatio) {
+      ratio = ratio / backingStoreRatio;
+    }
+
+    var oldWidth = context.canvas.width;
+    var oldHeight = context.canvas.height;
+
     var fontSize = 45;
-    context.font = "45px SignatureFont";
-    context.fillText('${name}', 20, 100);
+    var textHeight = 12;
+    if (realRatio === 2) {
+      fontSize = 90;
+      textHeight = 18;
+    }
+
+    var textWidth = -1;
+
+    do {
+      context.font = fontSize + "px SignatureFont";
+      textWidth = context.measureText('${name}').width * ratio;
+      fontSize = 7 * fontSize / 8;
+    } while (textWidth > oldWidth);
+
+    var textPosition = {
+      x: ((oldWidth - textWidth) / 2),
+      y: ((3 * oldHeight / 4) - textHeight)
+    };
+
+    context.fillStyle = '${penColor}';
+    context.fillText('${name}', textPosition.x, textPosition.y);
 
     /* Fire a finishedStroke function to update the state */
     executeNativeFunction('finishedStroke', {base64DataUrl: canvasElement.toDataURL()});
