@@ -14,17 +14,17 @@ var content = (penColor, backgroundColor, dataURL, penMinWidth, penMaxWidth, use
       var canvasHeight = height * devicePixelRatio;
       signaturePadCanvas.width = canvasWidth;
       signaturePadCanvas.height = canvasHeight;
-      signaturePadCanvas.getContext('2d').scale(devicePixelRatio, devicePixelRatio);
+      signaturePadCanvas.getContext("2d").scale(devicePixelRatio, devicePixelRatio);
     };
 
     var finishedStroke = function(base64DataUrl) {
-       executeNativeFunction('finishedStroke', {base64DataUrl: base64DataUrl});
+       executeNativeFunction("finishedStroke", {base64DataUrl: base64DataUrl});
     };
 
     var enableSignaturePadFunctionality = function () {
       var signaturePad = new SignaturePad(signaturePadCanvas, {
-        penColor: '${penColor || 'black'}',
-        backgroundColor: '${backgroundColor || 'white'}',
+        penColor: "${penColor || "black"}",
+        backgroundColor: "${backgroundColor || "white"}",
         onEnd: function() { finishedStroke(signaturePad.toDataURL()); }
       });
       /* signaturePad.translateMouseCoordinates = function (point) {
@@ -35,8 +35,8 @@ var content = (penColor, backgroundColor, dataURL, penMinWidth, penMaxWidth, use
       }; */
       signaturePad.minWidth = ${penMinWidth || 1};
       signaturePad.maxWidth = ${penMaxWidth || 4};
-      if ('${dataURL}') {
-        signaturePad.fromDataURL('${dataURL}');
+      if ("${dataURL}") {
+        signaturePad.fromDataURL("${dataURL}");
       }
     };
 
@@ -53,7 +53,7 @@ var content = (penColor, backgroundColor, dataURL, penMinWidth, penMaxWidth, use
     bodyHeight = window.innerHeight;
   }
 
-  var canvasElement = document.querySelector('canvas');
+  var canvasElement = document.querySelector("canvas");
 
   if (${useFont}) {
     var context = canvasElement.getContext("2d");
@@ -86,7 +86,7 @@ var content = (penColor, backgroundColor, dataURL, penMinWidth, penMaxWidth, use
 
     do {
       context.font = fontSize + "px SignatureFont";
-      textWidth = context.measureText('${name}').width * ratio;
+      textWidth = context.measureText("${name}").width * ratio;
       fontSize = 7 * fontSize / 8;
     } while (textWidth > oldWidth);
 
@@ -95,11 +95,11 @@ var content = (penColor, backgroundColor, dataURL, penMinWidth, penMaxWidth, use
       y: ((3 * oldHeight / 4) - textHeight)
     };
 
-    context.fillStyle = '${penColor}';
-    context.fillText('${name}', textPosition.x, textPosition.y);
+    context.fillStyle = "${penColor}";
+    context.fillText("${name}", textPosition.x, textPosition.y);
 
     /* Fire a finishedStroke function to update the state */
-    executeNativeFunction('finishedStroke', {base64DataUrl: canvasElement.toDataURL()});
+    executeNativeFunction("finishedStroke", {base64DataUrl: canvasElement.toDataURL()});
   } else {
     showSignaturePad(canvasElement, bodyWidth, bodyHeight);
   }
