@@ -37,12 +37,19 @@ export default content;
 If you would like to generate a signature as opposed to manually writing your own, you can enable the `useFont` prop to `true` and use the prop `name` where the generated signature will be based from.
 
 ```js
+...
+
+var signatureFont = require('./signature-font');
+
+...
+
 var aName = 'John Doe';
 
 <SignaturePad
   ...
   useFont={true}
   name={aName}
+  fontStyle={signatureFont}
 />
 ```
 
@@ -57,7 +64,6 @@ var {
   } = React;
 
 var SignaturePad = require('react-native-signature-pad');
-var signatureFont = require('./signature-font');
 
 var penMinWidth = 2;  // Default value: 1
 var penMaxWidth = 3;  // Default value: 4
@@ -73,7 +79,6 @@ export default class Demo extends Component {
           penMaxWidth={penMaxWidth}
           style={{flex: 1, backgroundColor: 'white'}}
           useFont={false}
-          fontStyle={signatureFont}
         />
       </View>
     )
