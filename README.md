@@ -32,6 +32,20 @@ var content = `
 export default content;
 ```
 
+## Generating a Signature from a String
+
+If you would like to generate a signature as opposed to manually writing your own, you can enable the `useFont` prop to `true` and use the prop `name` where the generated signature will be based from.
+
+```js
+var aName = 'John Doe';
+
+<SignaturePad
+  ...
+  useFont={true}
+  name={aName}
+/>
+```
+
 ## Example
 
 ```js
