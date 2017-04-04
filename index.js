@@ -36,7 +36,8 @@ class SignaturePad extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {base64DataUrl: props.dataURL || null, name: props.name};
+    var escapedName = props.name.replace(/"/, `\\"`);
+    this.state = {base64DataUrl: props.dataURL || null, name: escapedName };
     const { backgroundColor } = StyleSheet.flatten(props.style);
     var injectedJavaScript = injectedExecuteNativeFunction
       + injectedErrorHandler
@@ -48,7 +49,7 @@ class SignaturePad extends Component {
         props.penMinWidth,
         props.penMaxWidth,
         props.useFont,
-        this.state.name
+        escapedName
       );
     var html = htmlContent(injectedJavaScript, props.fontStyle);
     this.source = { html };
@@ -61,7 +62,8 @@ class SignaturePad extends Component {
   componentWillReceiveProps = (nextProps) => {
     console.log('componentWillReceiveProps', this.state.name, nextProps.name);
     if (this.props.useFont && this.state.name !== nextProps.name) {
-      this.setState({ name: nextProps.name });
+      var escapedName = nextProps.name.replace(/"/, `\\"`);
+      this.setState({ name: escapedName });
 
       const { backgroundColor } = StyleSheet.flatten(this.props.style);
       var injectedJavaScript = injectedExecuteNativeFunction
@@ -74,7 +76,7 @@ class SignaturePad extends Component {
           this.props.penMinWidth,
           this.props.penMaxWidth,
           this.props.useFont,
-          nextProps.name
+          escapedName
         );
       var html = htmlContent(injectedJavaScript, this.props.fontStyle);
       this.source = { html };
