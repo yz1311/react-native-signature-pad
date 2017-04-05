@@ -59,7 +59,6 @@ class SignaturePad extends Component {
   }
 
   componentWillReceiveProps = (nextProps) => {
-    console.log('componentWillReceiveProps', this.state.name, nextProps.name);
     if (this.props.useFont && this.state.name !== nextProps.name) {
       this.setState({ name: nextProps.name });
 
