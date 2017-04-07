@@ -22,17 +22,22 @@ class SignaturePad extends Component {
     dataURL: PropTypes.string,
     penMinWidth: PropTypes.number,
     penMaxWidth: PropTypes.number,
+    useFont: PropTypes.bool,
+    name: PropTypes.string,
+    fontStyle: PropTypes.string,
   };
 
   static defaultProps = {
     onChange: () => {},
     onError: () => {},
     style: {},
+    useFont: false
   };
 
   constructor(props) {
     super(props);
-    this.state = {base64DataUrl: props.dataURL || null};
+    var escapedName = props.name.replace(/"/, `\\"`);
+    this.state = {base64DataUrl: props.dataURL || null, name: escapedName };
     const { backgroundColor } = StyleSheet.flatten(props.style);
     var injectedJavaScript = injectedExecuteNativeFunction
       + injectedErrorHandler
@@ -43,14 +48,39 @@ class SignaturePad extends Component {
         props.dataURL,
         props.penMinWidth,
         props.penMaxWidth,
+        props.useFont,
+        escapedName
       );
-    var html = htmlContent(injectedJavaScript);
+    var html = htmlContent(injectedJavaScript, props.fontStyle);
     this.source = { html };
     // We don't use WebView's injectedJavaScript because on Android,
     //  the WebView re-injects the JavaScript upon every url change.
     // Given that we use url changes to communicate signature changes to the
     //  React Native app, the JS is re-injected every time a stroke is drawn.
   }
+
+  componentWillReceiveProps = (nextProps) => {
+    if (this.props.useFont && this.state.name !== nextProps.name) {
+      var escapedName = nextProps.name.replace(/"/, `\\"`);
+      this.setState({ name: escapedName });
+
+      const { backgroundColor } = StyleSheet.flatten(this.props.style);
+      var injectedJavaScript = injectedExecuteNativeFunction
+        + injectedErrorHandler
+        + injectedSignaturePad
+        + injectedApplication(
+          this.props.penColor,
+          backgroundColor,
+          this.props.dataURL,
+          this.props.penMinWidth,
+          this.props.penMaxWidth,
+          this.props.useFont,
+          escapedName
+        );
+      var html = htmlContent(injectedJavaScript, this.props.fontStyle);
+      this.source = { html };
+    }
+  };
 
   _onNavigationChange = (args) => {
     this._parseMessageFromWebViewNavigationChange(unescape(args.url));
