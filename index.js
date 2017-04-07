@@ -166,6 +166,7 @@ class SignaturePad extends Component {
         scrollEnabled={false}
         javaScriptEnabled={true}
         style={this.props.style}
+        scalesPageToFit={true}
       />
     );
   };

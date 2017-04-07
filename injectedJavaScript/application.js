@@ -58,41 +58,29 @@ var content = (penColor, backgroundColor, dataURL, penMinWidth, penMaxWidth, use
   if (${useFont}) {
     var context = canvasElement.getContext("2d");
     var devicePixelRatio = 1; /* window.devicePixelRatio || 1; */
-    context.canvas.width = bodyWidth * devicePixelRatio;
-    context.canvas.height = bodyHeight * devicePixelRatio;
+    canvasElement.width = bodyWidth * devicePixelRatio;
+    canvasElement.height = bodyHeight * devicePixelRatio;
 
-    var ratio = Math.max(window.devicePixelRatio || 1, 1);
-    var backingStoreRatio = context.webkitBackingStorePixelRatio ||
-			context.mozBackingStorePixelRatio ||
-			context.msBackingStorePixelRatio ||
-			context.oBackingStorePixelRatio ||
-			context.backingStorePixelRatio || 1;
-    var realRatio = ratio / backingStoreRatio;
-    if (ratio !== backingStoreRatio) {
-      ratio = ratio / backingStoreRatio;
-    }
+    var oldWidth = canvasElement.offsetWidth;
+    var oldHeight = canvasElement.offsetHeight;
+    var w = bodyWidth;
+    var h = bodyHeight;
+    canvasElement.width = oldWidth;
+    canvasElement.height = oldHeight;
 
-    var oldWidth = context.canvas.width;
-    var oldHeight = context.canvas.height;
-
-    var fontSize = 45;
-    var textHeight = 12;
-    if (realRatio === 2) {
-      fontSize = 90;
-      textHeight = 18;
-    }
-
+    var ratio = (bodyWidth/bodyHeight);
+    var fontSize = 45 * ratio;
+    var textHeight = 12 * ratio;
     var textWidth = -1;
-
     do {
       context.font = fontSize + "px SignatureFont";
-      textWidth = context.measureText("${name}").width * ratio;
+      textWidth = context.measureText("${name}").width;
       fontSize = 7 * fontSize / 8;
-    } while (textWidth > oldWidth);
+    } while (textWidth > w);
 
     var textPosition = {
-      x: ((oldWidth - textWidth) / 2),
-      y: ((3 * oldHeight / 4) - textHeight)
+      x: ((w - textWidth) / 2),
+      y: ((3 * h / 4) - textHeight)
     };
 
     context.fillStyle = "${penColor}";
