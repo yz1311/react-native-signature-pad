@@ -68,15 +68,14 @@ var content = (penColor, backgroundColor, dataURL, penMinWidth, penMaxWidth, use
     canvasElement.width = oldWidth * 2;
     canvasElement.height = oldHeight * 2;
 
-    var ratio = (bodyWidth/bodyHeight);
-    var fontSize = 45 * ratio;
-    var textHeight = 12 * ratio;
+    var fontSize = 70;
+    var textHeight = 18;
     var textWidth = -1;
     do {
       context.font = fontSize + "px SignatureFont";
       textWidth = context.measureText("${name}").width;
       fontSize = 7 * fontSize / 8;
-    } while (textWidth > w);
+    } while (textWidth + (w * 0.05) > w);
 
     var textPosition = {
       x: ((w - textWidth) / 2),
