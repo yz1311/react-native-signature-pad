@@ -1,4 +1,4 @@
-var content = (penColor, backgroundColor, dataURL, penMinWidth, penMaxWidth, useFont, name) => `
+var content = (penColor, backgroundColor, dataURL, penMinWidth, penMaxWidth, useFont, name, height, width) => `
 
   var showSignaturePad = function (signaturePadCanvas, bodyWidth, bodyHeight) {
     /*We're rotating by 90% -> Flip X and Y*/
@@ -9,7 +9,7 @@ var content = (penColor, backgroundColor, dataURL, penMinWidth, penMaxWidth, use
     var height = bodyHeight;
 
     var sizeSignaturePad = function () {
-      var devicePixelRatio = 1; /*window.devicePixelRatio || 1;*/
+      var devicePixelRatio = window.devicePixelRatio || 1;
       var canvasWidth = width * devicePixelRatio;
       var canvasHeight = height * devicePixelRatio;
       signaturePadCanvas.width = canvasWidth;
@@ -44,13 +44,13 @@ var content = (penColor, backgroundColor, dataURL, penMinWidth, penMaxWidth, use
     enableSignaturePadFunctionality();
   };
 
-  var bodyWidth = document.body.clientWidth;
-  var bodyHeight = document.body.clientHeight;
+  var bodyWidth = document.body.clientWidth * 2;
+  var bodyHeight = document.body.clientHeight * 2;
   if(!bodyWidth) {
-    bodyWidth = window.innerWidth;
+    bodyWidth = window.innerWidth ? window.innerWidth : ${width};
   }
   if(!bodyHeight) {
-    bodyHeight = window.innerHeight;
+    bodyHeight = window.innerHeight ? window.innerHeight : ${height};
   }
 
   var canvasElement = document.querySelector("canvas");
@@ -65,8 +65,8 @@ var content = (penColor, backgroundColor, dataURL, penMinWidth, penMaxWidth, use
     var oldHeight = canvasElement.offsetHeight;
     var w = bodyWidth;
     var h = bodyHeight;
-    canvasElement.width = oldWidth;
-    canvasElement.height = oldHeight;
+    canvasElement.width = oldWidth * 2;
+    canvasElement.height = oldHeight * 2;
 
     var ratio = (bodyWidth/bodyHeight);
     var fontSize = 45 * ratio;
@@ -89,7 +89,7 @@ var content = (penColor, backgroundColor, dataURL, penMinWidth, penMaxWidth, use
     /* Fire a finishedStroke function to update the state */
     executeNativeFunction("finishedStroke", {base64DataUrl: canvasElement.toDataURL()});
   } else {
-    showSignaturePad(canvasElement, bodyWidth, bodyHeight);
+    showSignaturePad(canvasElement, bodyWidth / 2, bodyHeight / 2);
   }
 `;
 
