@@ -61,14 +61,13 @@ var content = (penColor, backgroundColor, dataURL, penMinWidth, penMaxWidth, use
     canvasElement.width = bodyWidth * devicePixelRatio;
     canvasElement.height = bodyHeight * devicePixelRatio;
 
-    var oldWidth = canvasElement.offsetWidth;
-    var oldHeight = canvasElement.offsetHeight;
     var w = bodyWidth;
     var h = bodyHeight;
-    canvasElement.width = oldWidth * 2;
-    canvasElement.height = oldHeight * 2;
+    canvasElement.width = canvasElement.offsetWidth * 2;
+    canvasElement.height = canvasElement.offsetHeight * 2;
 
-    var fontSize = 70;
+    var fontToHeightRatio = 45 / 159;
+    var fontSize = canvasElement.height * fontToHeightRatio;
     var textHeight = 18;
     var textWidth = -1;
     do {
