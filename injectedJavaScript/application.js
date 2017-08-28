@@ -71,7 +71,7 @@ var content = (penColor, backgroundColor, dataURL, penMinWidth, penMaxWidth, use
     var textHeight = 18;
     var textWidth = -1;
     do {
-      context.font = fontSize + "px SignatureFont";
+      context.font = fontSize + "px SignatureFont, cursive";
       textWidth = context.measureText("${name}").width;
       fontSize = 7 * fontSize / 8;
     } while (textWidth + (w * 0.05) > w);
