@@ -3,7 +3,7 @@ React Native wrapper around @[szimek's](https://github.com/szimek) HTML5 Canvas 
 
 - Supports Android and iOS
 - Pure JavaScript implementation with no native dependencies
-- Tested with RN 0.32
+- Tested with RN 0.40
 - Can easily be rotated using the "transform" style
 - Generates a base64 encoded png image of the signature
 
@@ -93,3 +93,11 @@ export default class Demo extends Component {
   };
 }
 ```
+
+## Android 7 WebView Changes
+
+Google changed the default behaviour for WebViews with Android 7 (Nougat). In apps that use WebViews, it no longer uses the WebView APK in previous versions but instead it uses the Chrome WebView.
+
+Source: https://developer.android.com/about/versions/nougat/android-7.0.html#webview
+
+Because of this, WebView's `onMessage` prop replaces `onChange` previously used. However, `onMessage` was not implemented in React Native WebView until React Native v0.37. 
