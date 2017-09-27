@@ -1,10 +1,6 @@
 var content = (penColor, backgroundColor, dataURL, penMinWidth, penMaxWidth, useFont, name, height, width) => `
 
   var showSignaturePad = function (signaturePadCanvas, bodyWidth, bodyHeight) {
-    /*We're rotating by 90% -> Flip X and Y*/
-    /*var width = bodyHeight;
-    var height = bodyWidth;*/
-
     var width = bodyWidth;
     var height = bodyHeight;
 
@@ -17,22 +13,12 @@ var content = (penColor, backgroundColor, dataURL, penMinWidth, penMaxWidth, use
       signaturePadCanvas.getContext("2d").scale(devicePixelRatio, devicePixelRatio);
     };
 
-    var finishedStroke = function(base64DataUrl) {
-       executeNativeFunction("finishedStroke", {base64DataUrl: base64DataUrl});
-    };
-
     var enableSignaturePadFunctionality = function () {
       var signaturePad = new SignaturePad(signaturePadCanvas, {
         penColor: "${penColor || "black"}",
         backgroundColor: "${backgroundColor || "white"}",
         onEnd: function() { finishedStroke(signaturePad.toDataURL()); }
       });
-      /* signaturePad.translateMouseCoordinates = function (point) {
-        var translatedY = point.x;
-        var translatedX = width - point.y;
-        point.x = translatedX;
-        point.y = translatedY;
-      }; */
       signaturePad.minWidth = ${penMinWidth || 1};
       signaturePad.maxWidth = ${penMaxWidth || 4};
       if ("${dataURL}") {
@@ -54,6 +40,10 @@ var content = (penColor, backgroundColor, dataURL, penMinWidth, penMaxWidth, use
   }
 
   var canvasElement = document.querySelector("canvas");
+
+  var finishedStroke = function(base64DataUrl) {
+    window.postMessage(JSON.stringify({ base64DataUrl: base64DataUrl }));
+  };
 
   if (${useFont}) {
     var context = canvasElement.getContext("2d");
@@ -85,7 +75,9 @@ var content = (penColor, backgroundColor, dataURL, penMinWidth, penMaxWidth, use
     context.fillText("${name}", textPosition.x, textPosition.y);
 
     /* Fire a finishedStroke function to update the state */
-    executeNativeFunction("finishedStroke", {base64DataUrl: canvasElement.toDataURL()});
+    setTimeout(function () {
+      finishedStroke(canvasElement.toDataURL());
+    }, 75);
   } else {
     showSignaturePad(canvasElement, bodyWidth / 2, bodyHeight / 2);
   }
