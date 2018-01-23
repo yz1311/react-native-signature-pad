@@ -26,6 +26,7 @@ var content = (penColor, backgroundColor, dataURL, penMinWidth, penMaxWidth, use
       }
     };
 
+    reportSize(width, height);
     sizeSignaturePad();
     enableSignaturePadFunctionality();
   };
@@ -40,6 +41,14 @@ var content = (penColor, backgroundColor, dataURL, penMinWidth, penMaxWidth, use
   }
 
   var canvasElement = document.querySelector("canvas");
+
+    var reportSize = function(width, height) {
+      if (postMessage.length === 1) {
+        window.postMessage(JSON.stringify({ width: width, height: height }));
+      } else { 
+        setTimeout(function() { reportSize(width, height) }, 100);
+      }
+  }
 
   var finishedStroke = function(base64DataUrl) {
     window.postMessage(JSON.stringify({ base64DataUrl: base64DataUrl }));

@@ -157,6 +157,11 @@ class SignaturePad extends Component {
         this.setState({base64DataUrl});
     };
 
+    _bridged_canvasSize = (data) => {
+        this.props.onChange(data);
+        // this.setState({base64DataUrl});
+    };
+
     _renderError = (args) => {
         this.props.onError({details: args});
     };
@@ -165,8 +170,14 @@ class SignaturePad extends Component {
     };
 
     _onMessage = (event) => {
-        var base64DataUrl = JSON.parse(event.nativeEvent.data);
-        this._bridged_finishedStroke(base64DataUrl);
+        // console.log(event.nativeEvent.data);
+        var data = JSON.parse(event.nativeEvent.data);
+        if (data.hasOwnProperty('width')) {
+            this._bridged_canvasSize(data);
+        }
+        else {
+            this._bridged_finishedStroke(data);
+        }
     }
 
     render = () => {
