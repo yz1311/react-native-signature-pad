@@ -28,6 +28,7 @@ class SignaturePad extends Component {
         useFont: PropTypes.bool,
         name: PropTypes.string,
         fontStyle: PropTypes.string,
+        initTimeout: PropTypes.number
     };
 
     static defaultProps = {
@@ -56,7 +57,8 @@ class SignaturePad extends Component {
                 props.useFont,
                 escapedName,
                 props.height,
-                props.width
+                props.width,
+                props.initTimeout
             );
         var html = htmlContent(injectedJavaScript, props.fontStyle);
         this.source = {html};
@@ -84,7 +86,8 @@ class SignaturePad extends Component {
                     this.props.useFont,
                     escapedName,
                     this.props.height,
-                    this.props.width
+                    this.props.width,
+                    this.props.initTimeout
                 );
             var html = htmlContent(injectedJavaScript, this.props.fontStyle);
             this.source = {html};
@@ -183,6 +186,7 @@ class SignaturePad extends Component {
     render = () => {
         return (
             <WebView
+                ref={(ref) => { this._webview = ref }}
                 automaticallyAdjustContentInsets={false}
                 onNavigationStateChange={this._onNavigationChange}
                 onMessage={this._onMessage}

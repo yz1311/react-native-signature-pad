@@ -1,59 +1,69 @@
-var content = (penColor, backgroundColor, dataURL, penMinWidth, penMaxWidth, useFont, name, height, width) => `
+var content = (penColor, backgroundColor, dataURL, penMinWidth, penMaxWidth, useFont, name, height, width, initTimeout) => `
 
-  var showSignaturePad = function (signaturePadCanvas, bodyWidth, bodyHeight) {
-    var width = bodyWidth;
-    var height = bodyHeight;
+var showSignaturePad = function (signaturePadCanvas, bodyWidth, bodyHeight) {
+  var width = bodyWidth;
+  var height = bodyHeight;
 
-    var sizeSignaturePad = function () {
-      var devicePixelRatio = window.devicePixelRatio || 1;
-      var canvasWidth = width * devicePixelRatio;
-      var canvasHeight = height * devicePixelRatio;
-      signaturePadCanvas.width = canvasWidth;
-      signaturePadCanvas.height = canvasHeight;
-      signaturePadCanvas.getContext("2d").scale(devicePixelRatio, devicePixelRatio);
-    };
-
-    var enableSignaturePadFunctionality = function () {
-      var signaturePad = new SignaturePad(signaturePadCanvas, {
-        penColor: "${penColor || "black"}",
-        backgroundColor: "${backgroundColor || "white"}",
-        onEnd: function() { finishedStroke(signaturePad.toDataURL()); }
-      });
-      signaturePad.minWidth = ${penMinWidth || 1};
-      signaturePad.maxWidth = ${penMaxWidth || 4};
-      if ("${dataURL}") {
-        signaturePad.fromDataURL("${dataURL}");
-      }
-    };
-
-    reportSize(width, height);
-    sizeSignaturePad();
-    enableSignaturePadFunctionality();
+  var sizeSignaturePad = function () {
+    var devicePixelRatio = window.devicePixelRatio || 1;
+    var canvasWidth = width * devicePixelRatio;
+    var canvasHeight = height * devicePixelRatio;
+    signaturePadCanvas.width = canvasWidth;
+    signaturePadCanvas.height = canvasHeight;
+    signaturePadCanvas.getContext("2d").scale(devicePixelRatio, devicePixelRatio);
   };
 
-  var bodyWidth = document.body.clientWidth * 2;
-  var bodyHeight = document.body.clientHeight * 2;
+  var enableSignaturePadFunctionality = function () {
+    var signaturePad = new SignaturePad(signaturePadCanvas, {
+      penColor: "${penColor || "black"}",
+      backgroundColor: "${backgroundColor || "white"}",
+      onEnd: function() { finishedStroke(signaturePad.toDataURL()); }
+    });
+    signaturePad.minWidth = ${penMinWidth || 1};
+    signaturePad.maxWidth = ${penMaxWidth || 4};
+    if ("${dataURL}") {
+      signaturePad.fromDataURL("${dataURL}");
+    }
+  };
+
+  reportSize(width, height);
+  sizeSignaturePad();
+  enableSignaturePadFunctionality();
+};
+
+var canvasElement = document.querySelector("canvas");
+
+var reportSize = function(width, height) {
+  if (postMessage.length === 1) {
+    window.postMessage(JSON.stringify({ width: width, height: height }));
+  } else { 
+    setTimeout(function() { reportSize(width, height) }, 100);
+  }
+}
+
+var finishedStroke = function(base64DataUrl) {
+  window.postMessage(JSON.stringify({ base64DataUrl: base64DataUrl }));
+};
+
+var getBodyWidth = function() {
+  var bodyWidth = document && document.body && document.body.clientWidth ? document.body.clientWidth * 2 : 0;
   if(!bodyWidth) {
-    bodyWidth = window.innerWidth ? window.innerWidth : ${width};
+    bodyWidth = window && window.innerWidth ? window.innerWidth : ${width || 0};
   }
+
+  return bodyWidth;
+};
+
+var getBodyHeight = function() {
+  var bodyHeight = document && document.body && document.body.clientHeight ? document.body.clientHeight * 2 : 0;
   if(!bodyHeight) {
-    bodyHeight = window.innerHeight ? window.innerHeight : ${height};
+    bodyHeight = window && window.innerHeight ? window.innerHeight : ${height || 0};
   }
 
-  var canvasElement = document.querySelector("canvas");
+  return bodyHeight;
+};
 
-    var reportSize = function(width, height) {
-      if (postMessage.length === 1) {
-        window.postMessage(JSON.stringify({ width: width, height: height }));
-      } else { 
-        setTimeout(function() { reportSize(width, height) }, 100);
-      }
-  }
-
-  var finishedStroke = function(base64DataUrl) {
-    window.postMessage(JSON.stringify({ base64DataUrl: base64DataUrl }));
-  };
-
+var initSignaturePad = function(bodyWidth, bodyHeight) {
   if (${useFont}) {
     var context = canvasElement.getContext("2d");
     var devicePixelRatio = 1; /* window.devicePixelRatio || 1; */
@@ -88,8 +98,60 @@ var content = (penColor, backgroundColor, dataURL, penMinWidth, penMaxWidth, use
       finishedStroke(canvasElement.toDataURL());
     }, 75);
   } else {
-    showSignaturePad(canvasElement, bodyWidth / 2, bodyHeight / 2);
+      showSignaturePad(canvasElement, bodyWidth / 2, bodyHeight / 2);
   }
+};
+
+var whileDocumentSizeNotSet = function(timeout, maximumWaitTime) {
+  try {
+    if ( typeof whileDocumentSizeNotSet.counter == 'undefined' ) {
+      whileDocumentSizeNotSet.counter = 0;
+      whileDocumentSizeNotSet.bodyHeight = 0;
+      whileDocumentSizeNotSet.bodyWidth = 0;
+    } else {
+      whileDocumentSizeNotSet.counter++;
+    }
+
+
+    const maxAttemts = Math.floor(maximumWaitTime / timeout);
+    const attempt = whileDocumentSizeNotSet.counter;
+
+    const previousBodyHeight = whileDocumentSizeNotSet.bodyHeight;
+    const previousBodyWidth = whileDocumentSizeNotSet.bodyWidth;
+    
+    const bodyHeight = getBodyHeight();
+    const bodyWidth = getBodyWidth();
+
+    whileDocumentSizeNotSet.bodyHeight = bodyHeight;
+    whileDocumentSizeNotSet.bodyWidth = bodyWidth;
+    
+    if (bodyHeight === 0 || bodyWidth === 0 || previousBodyWidth !== bodyWidth || previousBodyHeight !== bodyHeight) {
+      if (attempt <= maxAttemts) {
+       setTimeout(whileDocumentSizeNotSet, timeout, timeout, maximumWaitTime);
+       
+       return false;
+      } else {
+        window.alert('Timed out trying to load SignaturePad, tried ' + attempt + ' times in ' + maximumWaitTime + 'ms.');
+        // of maximumWaitTime:' + maximumWaitTime + ', timeout:' + timeout + ', maxAttemts' + maxAttemts + ' times');
+
+        initSignaturePad(700, 700);
+      }
+    } else {
+      initSignaturePad(bodyWidth, bodyHeight);
+
+      // window.alert('Had to wait ' + attempt + ' times, width: ' + bodyWidth + ', height: ' + bodyHeight);
+    }
+  } catch (e) {
+    if (window) {
+      window.alert(e.message);
+    }
+  }
+
+  return true;
+};
+
+whileDocumentSizeNotSet(250, ${initTimeout || 3000});
+
 `;
 
 export default content;

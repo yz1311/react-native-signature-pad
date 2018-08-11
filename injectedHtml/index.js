@@ -25,7 +25,7 @@ var content = (script, fontStyle) =>
     </style>
 
     <style type="text/css">
-      ${fontStyle}
+      ${fontStyle || ''}
     </style>
 
     <body>
