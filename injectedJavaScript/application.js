@@ -24,6 +24,25 @@ var showSignaturePad = function (signaturePadCanvas, bodyWidth, bodyHeight) {
     if ("${dataURL}") {
       signaturePad.fromDataURL("${dataURL}");
     }
+    document.addEventListener('message', function (event) {
+      var data;
+      try {
+        data = JSON.parse(event.data);
+      } catch (err) {
+        return;
+      }
+
+      if (!data) return;
+
+      var action = data['action'];
+      if (!action) return;
+
+      if (action === 'clear') {
+        signaturePad && signaturePad.clear();
+
+        return;
+      }
+    });
   };
 
   reportSize(width, height);

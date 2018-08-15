@@ -183,6 +183,10 @@ class SignaturePad extends Component {
         }
     }
 
+    clear = () => {
+        this._webview.postMessage(JSON.stringify({ action: 'clear' }));
+    }
+
     render = () => {
         return (
             <WebView
