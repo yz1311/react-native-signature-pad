@@ -197,4 +197,4 @@ class SignaturePad extends Component {
     };
 }
 
-module.exports = SignaturePad;
+export { SignaturePad as default }
