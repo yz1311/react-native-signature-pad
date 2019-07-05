@@ -16,6 +16,8 @@ export default class SignaturePad extends Component {
     onChange: PropTypes.func,
     onError: PropTypes.func,
     style: ViewPropTypes.style,
+    minWidth: PropTypes.number,
+    maxWidth: PropTypes.number,
     penColor: PropTypes.string,
     dataURL: PropTypes.string
   };
@@ -26,7 +28,9 @@ export default class SignaturePad extends Component {
     onError: () => {
 
     },
-    style: {}
+    style: {},
+    minWidth: 1,
+    maxWidth: 4
   };
 
   constructor(props) {
@@ -36,7 +40,7 @@ export default class SignaturePad extends Component {
     var injectedJavaScript = injectedExecuteNativeFunction
       + injectedErrorHandler
       + injectedSignaturePad
-      + injectedApplication(props.penColor, backgroundColor, props.dataURL);
+      + injectedApplication(props.penColor,props.minWidth || 1,props.maxWidth || 4, backgroundColor, props.dataURL);
     var html = htmlContent(injectedJavaScript);
     this.source = {html}; //We don't use WebView's injectedJavaScript because on Android, the WebView re-injects the JavaScript upon every url change. Given that we use url changes to communicate signature changes to the React Native app, the JS is re-injected every time a stroke is drawn.
   }
