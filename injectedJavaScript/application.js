@@ -54,7 +54,7 @@ var canvasElement = document.querySelector("canvas");
 
 var reportSize = function(width, height) {
   if (postMessage.length === 1) {
-    executeNativeFunction('onRecChange',{ width: width, height: height });
+    executeNativeFunction('canvasSize',{ width: width, height: height });
   } else { 
     setTimeout(function() { reportSize(width, height) }, 100);
   }
