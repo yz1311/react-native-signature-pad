@@ -25,6 +25,14 @@ https://github.com/JamesMcIntosh/react-native-signature-pad  :该库没有兼容
 https://github.com/YanYuanFE/react-native-signature-canvas   :跟官方库一样的毛病
 https://github.com/RepairShopr/react-native-signature-capture   :最后希望的库了，但是不支持还原签名数据
 
+
+2019/09/20
+https://github.com/JamesMcIntosh/react-native-signature-pad
+在该库的基础上面，改变了数据返回的方式，不是画完就返回，而是手动去获取数据然后返回(卡的原因就是每次画完都返回，传输速度慢了))
+
+2019/09/21
+修复ios下面postMessage无法传递参数到web的问题，目前两端已能正常使用
+
 ## Demo
 
 ![SignaturePadDemo](https://cloud.githubusercontent.com/assets/7293984/13297035/303fefc6-dae5-11e5-99e8-edb8335633b5.gif) ![SignaturePadDemoAndroid](https://cloud.githubusercontent.com/assets/7293984/13299954/72bc3bf4-daf2-11e5-8606-388c05c26d6d.gif)
@@ -86,8 +94,9 @@ export default class Demo extends Component {
     return (
       <View style={{flex: 1}}>
         <SignaturePad
+          ref=(ref=>this.signaturePad=ref)
           onError={this._signaturePadError}
-          onChange={this._signaturePadChange}
+          onChange={this._signaturePadChange}  //该事件已失效，影响性能
           penMinWidth={penMinWidth}
           penMaxWidth={penMaxWidth}
           style={{flex: 1, backgroundColor: 'white'}}
@@ -104,6 +113,16 @@ export default class Demo extends Component {
   _signaturePadChange = ({base64DataUrl}) => {
     console.log("Got new signature: " + base64DataUrl);
   };
+
+  getDataURL = async () => {
+    try{
+      //主动获取结果
+        let base64Str = await this.signaturePad.getDataURL();
+    } catch(e) {
+
+    }
+         
+  }
 }
 ```
 

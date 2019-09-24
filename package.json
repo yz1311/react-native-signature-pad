@@ -1,6 +1,6 @@
 {
-  "name": "react-native-signature-pad",
-  "version": "0.1.2",
+  "name": "@yz1311/react-native-signature-pad",
+  "version": "0.1.5",
   "description": "React Native wrapper around szimek's Canvas based Signature Pad",
   "main": "index.js",
   "scripts": {
@@ -9,6 +9,9 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/yz1311/react-native-signature-pad.git"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "keywords": [
     "react-native",

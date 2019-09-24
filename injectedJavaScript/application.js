@@ -1,3 +1,5 @@
+import {Platform} from 'react-native';
+
 var content = (penColor, backgroundColor, dataURL, penMinWidth, penMaxWidth, useFont, name, height, width, initTimeout) => `
 
 var showSignaturePad = function (signaturePadCanvas, bodyWidth, bodyHeight) {
@@ -17,14 +19,14 @@ var showSignaturePad = function (signaturePadCanvas, bodyWidth, bodyHeight) {
     var signaturePad = new SignaturePad(signaturePadCanvas, {
       penColor: "${penColor || "black"}",
       backgroundColor: "${backgroundColor || "white"}",
-      onEnd: function() { finishedStroke(signaturePad.toDataURL()); }
+      // onEnd: function() { finishedStroke(signaturePad.toDataURL()); }   //数据量太大，就是这里导致的卡顿
     });
     signaturePad.minWidth = ${penMinWidth || 1};
     signaturePad.maxWidth = ${penMaxWidth || 4};
     if ("${dataURL}") {
       signaturePad.fromDataURL("${dataURL}");
     }
-    document.addEventListener('message', function (event) {
+    ${Platform.OS==='ios'?'window':'document'}.addEventListener('message', function (event) {
       var data;
       try {
         data = JSON.parse(event.data);
@@ -36,10 +38,14 @@ var showSignaturePad = function (signaturePadCanvas, bodyWidth, bodyHeight) {
 
       var action = data['action'];
       if (!action) return;
-
+   
       if (action === 'clear') {
         signaturePad && signaturePad.clear();
 
+        return;
+      } else if(action === 'getDataURL') {
+        var data = signaturePad.toDataURL();
+        executeNativeFunction('getDataURL',{ base64DataUrl: data, type:'getDataURL' });
         return;
       }
     });
@@ -54,14 +60,14 @@ var canvasElement = document.querySelector("canvas");
 
 var reportSize = function(width, height) {
   if (postMessage.length === 1) {
-    executeNativeFunction('canvasSize',{ width: width, height: height });
+    executeNativeFunction('canvasSize',{ width: width, height: height, type: 'canvasSize' });
   } else { 
     setTimeout(function() { reportSize(width, height) }, 100);
   }
 }
 
 var finishedStroke = function(base64DataUrl) {
-  executeNativeFunction('finishedStroke',{ base64DataUrl: base64DataUrl });
+  executeNativeFunction('finishedStroke',{ base64DataUrl: base64DataUrl, type:'finishedStroke' });
 };
 
 var getBodyWidth = function() {
@@ -113,9 +119,9 @@ var initSignaturePad = function(bodyWidth, bodyHeight) {
     context.fillText("${name}", textPosition.x, textPosition.y);
 
     /* Fire a finishedStroke function to update the state */
-    setTimeout(function () {
-      finishedStroke(canvasElement.toDataURL());
-    }, 75);
+    // setTimeout(function () {
+    //   finishedStroke(canvasElement.toDataURL());
+    // }, 75);
   } else {
       showSignaturePad(canvasElement, bodyWidth / 2, bodyHeight / 2);
   }

@@ -18,6 +18,7 @@ import injectedExecuteNativeFunction from './injectedJavaScript/executeNativeFun
 class SignaturePad extends Component {
     static propTypes = {
         onChange: PropTypes.func,
+        onResult: PropTypes.func,
         onError: PropTypes.func,
         style: ViewPropTypes.style,
         penColor: PropTypes.string,
@@ -34,6 +35,9 @@ class SignaturePad extends Component {
 
     static defaultProps = {
         onChange: () => {
+        },
+        onResult: () => {
+
         },
         onError: () => {
         },
@@ -95,6 +99,7 @@ class SignaturePad extends Component {
             this.source = {html};
         }
     };
+    
 
     _onNavigationChange = (args) => {
         this._parseMessageFromWebViewNavigationChange(unescape(args.url));
@@ -142,7 +147,6 @@ class SignaturePad extends Component {
     _attemptToExecuteNativeFunctionFromWebViewMessage = (message) => {
         if (message.executeFunction && message.arguments) {
             var parsedArguments = JSON.parse(message.arguments);
-
             var referencedFunction = this['_bridged_' + message.executeFunction];
             if (typeof(referencedFunction) === 'function') {
                 referencedFunction.apply(this, [parsedArguments]);
@@ -159,7 +163,12 @@ class SignaturePad extends Component {
 
     _bridged_finishedStroke = ({base64DataUrl}) => {
         this.props.onChange({base64DataUrl});
-        this.setState({base64DataUrl});
+        // this.setState({base64DataUrl});
+    };
+
+    _bridged_getDataURL = ({base64DataUrl}) => {
+        this.tempResolve&&this.tempResolve(base64DataUrl);
+        this.props.onResult({base64DataUrl});
     };
 
     _bridged_canvasSize = (data) => {
@@ -175,18 +184,32 @@ class SignaturePad extends Component {
     };
 
     _onMessage = (event) => {
-        // console.log(event.nativeEvent.data);
         var data = JSON.parse(event.nativeEvent.data);
-        if (data.hasOwnProperty('width')) {
-            this._bridged_canvasSize(data);
-        }
-        else {
-            this._bridged_finishedStroke(data);
+        switch (data.type) {
+            case 'canvasSize':
+                this._bridged_canvasSize(data);
+                break;
+            case 'finishedStroke':
+                this._bridged_finishedStroke(data);
+                break;
+            case 'getDataURL':
+                this._bridged_getDataURL(data);
+                break;
         }
     }
 
     clear = () => {
         this._webview.postMessage(JSON.stringify({ action: 'clear' }));
+    }
+
+    getDataURL = async () => {
+        return new Promise((resolve,reject)=>{
+            this.tempResolve=resolve;
+            this._webview.postMessage(JSON.stringify({ action: 'getDataURL' }));
+            setTimeout(()=>{
+                reject('获取失败');
+            },2000);
+        })
     }
 
     render = () => {
