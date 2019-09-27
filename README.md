@@ -1,7 +1,7 @@
 # react-native-signature-pad
 
 [![npm version](https://badge.fury.io/js/react-native-signature-pad.svg)](//npmjs.com/package/react-native-signature-pad)
-[![star this repo](http://githubbadges.com/star.svg?user=kevinstumpf&repo=react-native-signature-pad&style=flat)](https://github.com/kevinstumpf/react-native-signature-pad) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com) [![All Contributors](https://img.shields.io/badge/all_contributors-12-orange.svg?style=flat-square)](#contributors) [![Known Vulnerabilities](https://snyk.io/test/github/kevinstumpf/react-native-signature-pad/badge.svg?style=flat-square)](https://snyk.io/test/github/kevinstumpf/react-native-signature-pad) 
+[![star this repo](http://githubbadges.com/star.svg?user=yz1311&repo=react-native-signature-pad&style=flat)](https://github.com/yz1311/react-native-signature-pad) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com) [![All Contributors](https://img.shields.io/badge/all_contributors-12-orange.svg?style=flat-square)](#contributors) [![Known Vulnerabilities](https://snyk.io/test/github/yz1311/react-native-signature-pad/badge.svg?style=flat-square)](https://snyk.io/test/github/yz1311/react-native-signature-pad) 
 
 
 
@@ -15,22 +15,33 @@ React Native wrapper around @[szimek's](https://github.com/szimek) HTML5 Canvas 
 
 这个库跟最原始的有啥区别:
 
-- 1. 修复部分android手机上间歇性出现无法手写的情况(oppo、vivo的情况特别严重)
-- 2. 添加清空画板功能(清空画板也可以通过更改组件的key属性或者隐藏再显示的方式来实现)
+-  修复部分android手机上间歇性出现无法手写的情况(oppo、vivo的情况特别严重)
+   
+-  添加清空画板功能(清空画板也可以通过更改组件的key属性或者隐藏再显示的方式来实现)
 
+## 更新日志
+
+`2019/09/02`
 
 对使用webview先关的库绝望了，
+
 官方库:  在部分oppo/vivo手机上面无法手写，或者清空后无法手写
+
 https://github.com/JamesMcIntosh/react-native-signature-pad  :该库没有兼容性问题，但是很卡，特别是手写较快(真的不是很快)的情况下
+
 https://github.com/YanYuanFE/react-native-signature-canvas   :跟官方库一样的毛病
-https://github.com/RepairShopr/react-native-signature-capture   :最后希望的库了，但是不支持还原签名数据
+
+https://github.com/RepairShopr/react-native-signature-capture   :最有希望的库了,基于原生，但是不支持还原签名数据和设置透明背景
 
 
-2019/09/20
+`2019/09/20`
+
 https://github.com/JamesMcIntosh/react-native-signature-pad
+
 在该库的基础上面，改变了数据返回的方式，不是画完就返回，而是手动去获取数据然后返回(卡的原因就是每次画完都返回，传输速度慢了))
 
-2019/09/21
+`2019/09/21`
+
 修复ios下面postMessage无法传递参数到web的问题，目前两端已能正常使用
 
 ## Demo
@@ -40,7 +51,7 @@ https://github.com/JamesMcIntosh/react-native-signature-pad
 ## Installation
 
 ```sh
-$ yarn add react-native-signature-pad
+$ yarn add @yz1311/react-native-signature-pad
 ```
 
 ## Using a Custom Signature Font
