@@ -23,7 +23,7 @@ React Native wrapper around @[szimek's](https://github.com/szimek) HTML5 Canvas 
 
 `2019/09/02`
 
-对使用webview先关的库绝望了，
+对使用webview相关的库绝望了，
 
 官方库:  在部分oppo/vivo手机上面无法手写，或者清空后无法手写
 
@@ -51,7 +51,7 @@ https://github.com/JamesMcIntosh/react-native-signature-pad
 ## Installation
 
 ```sh
-$ yarn add @yz1311/react-native-signature-pad
+$ yarn add @yz1311/react-native-signature-pad  react-native-webview
 ```
 
 ## Using a Custom Signature Font
