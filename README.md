@@ -95,7 +95,7 @@ var aName = 'John Doe';
 ```js
 import React, {Component} from 'react';
 import {View} from 'react-native';
-import SignaturePad from 'react-native-signature-pad';
+import SignaturePad from '@yz1311/react-native-signature-pad';
 
 var penMinWidth = 2;  // Default value: 1
 var penMaxWidth = 3;  // Default value: 4
