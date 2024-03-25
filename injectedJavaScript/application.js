@@ -23,7 +23,7 @@ var showSignaturePad = function (signaturePadCanvas, bodyWidth, bodyHeight) {
     });
     signaturePad.minWidth = ${penMinWidth || 1};
     signaturePad.maxWidth = ${penMaxWidth || 4};
-    if ("${dataURL}") {
+    if (${dataURL}) {
       signaturePad.fromDataURL("${dataURL}");
     }
     ${Platform.OS==='ios'?'window':'document'}.addEventListener('message', function (event) {
@@ -46,6 +46,10 @@ var showSignaturePad = function (signaturePadCanvas, bodyWidth, bodyHeight) {
       } else if(action === 'getDataURL') {
         var data = signaturePad.toDataURL();
         executeNativeFunction('getDataURL',{ base64DataUrl: data, type:'getDataURL' });
+        return;
+      } else if(action === 'getIsEmpty') {
+        var data = signaturePad.isEmpty();
+        executeNativeFunction('getIsEmpty', { data: data, type:'getIsEmpty' });
         return;
       }
     });
