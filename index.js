@@ -3,10 +3,10 @@
 import React, {Component} from 'react';
 import {PropTypes} from 'prop-types';
 import {
-    ViewPropTypes,
-    StyleSheet,
+    StyleSheet
 } from 'react-native';
 import {WebView} from 'react-native-webview';
+import {ViewPropTypes} from 'deprecated-react-native-prop-types';
 
 
 import htmlContent from './injectedHtml';
@@ -74,7 +74,7 @@ class SignaturePad extends Component {
         //  React Native app, the JS is re-injected every time a stroke is drawn.
     }
 
-    componentWillReceiveProps = (nextProps) => {
+    UNSAFE_componentWillReceiveProps = (nextProps) => {
         if (this.props.useFont && this.state.name !== nextProps.name) {
             var escapedName = nextProps.name.replace(/"/, `\\"`);
             this.setState({name: escapedName});
@@ -171,6 +171,10 @@ class SignaturePad extends Component {
         this.props.onResult({base64DataUrl});
     };
 
+    _bridged_getIsEmpty = ({data}) => {
+        this.tempIsEmptyResolve&&this.tempIsEmptyResolve(data);
+    };
+
     _bridged_canvasSize = (data) => {
         this.props.onChange(data);
         // this.setState({base64DataUrl});
@@ -195,6 +199,9 @@ class SignaturePad extends Component {
             case 'getDataURL':
                 this._bridged_getDataURL(data);
                 break;
+            case 'getIsEmpty':
+                this._bridged_getIsEmpty(data);
+                break;
         }
     }
 
@@ -208,6 +215,16 @@ class SignaturePad extends Component {
             this._webview.postMessage(JSON.stringify({ action: 'getDataURL' }));
             setTimeout(()=>{
                 reject('获取失败');
+            },2000);
+        })
+    }
+
+    getIsEmpty = async () => {
+        return new Promise((resolve,reject)=>{
+            this.tempIsEmptyResolve=resolve;
+            this._webview.postMessage(JSON.stringify({ action: 'getIsEmpty' }));
+            setTimeout(()=>{
+                resolve(undefined);
             },2000);
         })
     }

@@ -131,8 +131,12 @@ export default class Demo extends Component {
         let base64Str = await this.signaturePad.getDataURL();
     } catch(e) {
 
-    }
-         
+    }  
+  }
+
+  getIsEmpty = async () => {
+    //获取是否有手写,true/false表示有结果，undefined表示获取失败
+    const isEmpty = await this.signaturePad.getIsEmpty();
   }
 }
 ```
