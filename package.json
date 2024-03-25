@@ -1,0 +1,49 @@
+{
+  "name": "@yz1311/react-native-signature-pad",
+  "version": "0.1.6",
+  "description": "React Native wrapper around szimek's Canvas based Signature Pad",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yz1311/react-native-signature-pad.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "react-native",
+    "react-component",
+    "ios",
+    "android",
+    "signature",
+    "pad",
+    "signaturepad",
+    "canvas"
+  ],
+  "author": "Kevin Stumpf",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/DispatcherInc/react-native-signature-pad/issues"
+  },
+  "homepage": "https://github.com/DispatcherInc/react-native-signature-pad#readme",
+  "peerDependencies": {
+    "react": "^16.8.4",
+    "react-native": "^0.58.6",
+    "react-native-webview": "^5.3.0",
+    "deprecated-react-native-prop-types": "*"
+  },
+  "dependencies": {
+    "prop-types": "^15.6.0"
+  },
+  "devDependencies": {
+    "babel-eslint": "10.0.1",
+    "eslint": "^5.15.1",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-jsx-a11y": "^6.2.1",
+    "eslint-plugin-react": "^7.12.4"
+  }
+}
